@@ -6,7 +6,7 @@ const { query } = require('../utils/db');
 router.get('/expenses', async (req, res, next) => {
     try {
         const result = await query(
-            `SELECT category, SUM(amount), user_name FROM expense_data GROUP BY category, user_name`
+            `SELECT category, SUM(amount), user_name FROM expense_data WHERE EXTRACT(MONTH from create_date) = EXTRACT(MONTH from CURRENT_DATE) GROUP BY category, user_name`
         );
 
         const expenses = result.rows.map(row => ({
@@ -33,7 +33,8 @@ router.get('/transactions', async (req, res, next) => {
         );
 
         const transactions = result.rows.map(row => ({
-            user: row.user_name,
+            payment_id: row.payment_id,
+            user_name: row.user_name,
             category: row.category,
             amount: row.amount,
             color: "",
