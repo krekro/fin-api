@@ -8,7 +8,7 @@ const config = {
         user: process.env.POSTGRES_USER || process.env.DB_USER || 'postgres',
         password: process.env.POSTGRES_PASSWORD || process.env.DB_PASSWORD,
         database: process.env.POSTGRES_DATABASE || process.env.DB_NAME || 'fin-tracker',
-        ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
+        sslmode: process.env.DB_SSLMODE || 'require'
     },
     cors: {
         origin: process.env.CORS_ORIGIN || '*',
