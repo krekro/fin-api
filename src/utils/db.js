@@ -7,6 +7,9 @@ const pool = new Pool({
     user: config.database.user,
     password: config.database.password,
     database: config.database.database,
+    ssl: {
+        mode: config.database.sslmode
+    },
     max: 20, // maximum number of clients in the pool
     idleTimeoutMillis: 30000, // how long a client is allowed to remain idle before being closed
     connectionTimeoutMillis: 2000, // how long to wait for a connection

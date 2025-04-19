@@ -28,6 +28,11 @@ app.use(errorHandler);
 // Start server
 app.listen(config.port, () => {
     console.log(`Server is running on port ${config.port}`);
+    console.log(`Database host: ${process.env.DB_HOST || 'localhost'}`);
+    console.log(`Database name: ${process.env.DB_NAME || 'fin-tracker'}`);
+    console.log(`Database user: ${process.env.DB_USER || 'postgres'}`);
+    console.log(`Database port: ${process.env.DB_PORT || 5432}`);
+    console.log(`SSL mode: ${process.env.DB_SSLMODE}`);
     console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
 });
 
