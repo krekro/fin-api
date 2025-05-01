@@ -54,7 +54,7 @@ router.get('/transactions', async (req, res, next) => {
 });
 
 // Add a new transaction
-router.put('/create-transaction', async (req, res, next) => {
+router.post('/create-transaction', async (req, res, next) => {
     try {
         const result = await query(
             `INSERT INTO expense_data (payment_id, user_name, category, amount, create_date, transaction_desc) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`,

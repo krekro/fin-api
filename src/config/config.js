@@ -10,6 +10,14 @@ const config = {
         database: process.env.POSTGRES_DATABASE || process.env.DB_NAME || 'fin-tracker',
         sslmode: process.env.DB_SSLMODE || 'require'
     },
+        supabase: {
+        host: process.env.SUPA_HOST,
+        port: process.env.SUPA_PORT,
+        user: process.env.SUPA_USER, 
+        password: process.env.SUPA_PASSWORD,
+        database: process.env.SUPA_DB,
+        sslmode: process.env.SUPA_SSLMODE
+    },
     cors: {
         origin: process.env.CORS_ORIGIN || '*',
         methods: ['GET', 'POST', 'PUT', 'DELETE'],
