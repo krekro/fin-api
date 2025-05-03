@@ -17,7 +17,7 @@ pool.on('error', (err) => {
     process.exit(-1);
 });
 
-const query = async (text, params) => {
+const sbquery = async (text, params) => {
     const start = Date.now();
     try {
         const res = await pool.query(text, params);
@@ -31,6 +31,6 @@ const query = async (text, params) => {
 };
 
 module.exports = {
-    query,
+    sbquery,
     pool
 }; 
