@@ -96,4 +96,27 @@ router.post('/create-transaction', async (req, res, next) => {
     }
 });
 
+
+router.delete('/delete-transaction', async (req, res, next) => {
+    const isValid = validateSession(req.query.session_id, req.query.user_name);
+    try{
+    if(isValid){
+        const result = await query(`DELETE FROM expense_data WHERE user_name = '${req.query.user_name}' AND payment_id = '${req.query.payment_id}' RETURNING payment_id`)
+        const response = result.rowCount;
+        if(response==1){
+            res.status(200).json({
+                status: "success",
+                message: `Successfully deleted transaction`
+            })
+        }else{
+            throw new Error ("Invalid payment_id or username")
+        }
+    }else{
+        throw new Error ("Invalid Session");
+    }
+    }catch(error) {
+        next(error);
+    }   
+})
+
 module.exports = router; 
