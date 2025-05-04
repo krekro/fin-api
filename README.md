@@ -1,27 +1,26 @@
 # Expense Tracker API
 
-A RESTful API for tracking expenses and transactions, built with Node.js, Express, and PostgreSQL.
+A RESTful API for managing personal expenses and transactions, built with Node.js and Express.
 
 ## Features
 
+- User authentication and session management
 - Track expenses by category
-- View transaction history
-- Group expenses by user
-- RESTful API endpoints
-- Secure database connections
-- Environment-based configuration
+- View monthly expense summaries
+- Manage transactions with descriptions
+- Secure session-based authentication
 
 ## Prerequisites
 
-- Node.js (v14 or higher)
-- PostgreSQL (v12 or higher)
-- npm or yarn
+- Node.js (>=14.0.0)
+- PostgreSQL database
+- Supabase account (for user authentication)
 
 ## Installation
 
 1. Clone the repository:
 ```bash
-git clone [your-repository-url]
+git clone [repository-url]
 cd expense-tracker-api-v1
 ```
 
@@ -30,120 +29,132 @@ cd expense-tracker-api-v1
 npm install
 ```
 
-3. Set up environment variables:
-```bash
-cp .env.example .env
+3. Create a `.env` file in the root directory with the following variables:
 ```
-Edit the `.env` file with your configuration:
-```env
-# Server Configuration
-PORT=4000
+DB_HOST=your_database_host
+DB_NAME=your_database_name
+DB_SSLMODE=your_ssl_mode
+SUPA_HOST=your_supabase_host
 NODE_ENV=development
-
-# Database Configuration
-DB_HOST=localhost
-DB_PORT=5432
-DB_USER=your_db_user
-DB_PASSWORD=your_db_password
-DB_NAME=your_db_name
-
-# CORS Configuration
-CORS_ORIGIN=http://localhost:3000
-
-# Logging
-LOG_LEVEL=info
 ```
 
-4. Set up your PostgreSQL database:
-```sql
-CREATE DATABASE your_db_name;
-```
+## Available Scripts
 
-## Project Structure
-
-```
-expense-tracker-api-v1/
-├── src/
-│   ├── config/         # Configuration files
-│   ├── middleware/     # Express middleware
-│   ├── routes/         # API routes
-│   ├── utils/          # Utility functions
-│   └── services/       # Business logic
-├── .env                # Environment variables
-├── .env.example        # Example environment variables
-├── .gitignore          # Git ignore file
-├── app.js              # Application entry point
-└── package.json        # Project dependencies
-```
+- `npm start` - Start the server in production mode
+- `npm run dev` - Start the server in development mode with hot reloading
+- `npm test` - Run tests
+- `npm run lint` - Run ESLint
 
 ## API Endpoints
 
-### Get Expenses by Category
-```
-GET /api/expenses
-```
-Returns expenses grouped by category and user.
+### Authentication
 
-### Get All Transactions
+#### Login
+- **POST** `/user/login`
+- Request body:
+```json
+{
+    "user_name": "username",
+    "password": "password"
+}
 ```
-GET /api/transactions
-```
-Returns all transactions ordered by date.
-
-### Server Status
-```
-GET /status
-```
-Returns server status information.
-
-## Development
-
-1. Start the development server:
-```bash
-npm run dev
+- Response:
+```json
+{
+    "status": "success",
+    "message": "Login successful",
+    "uid": "user_id",
+    "username": "username",
+    "session_id": "session_token"
+}
 ```
 
-2. Run tests:
-```bash
-npm test
+### Expenses
+
+#### Get Monthly Expenses
+- **GET** `/api/expenses?user_name=username&session_id=session_token`
+- Response:
+```json
+{
+    "status": "success",
+    "data": [
+        {
+            "user": "username",
+            "category": "category_name",
+            "amount": 100.00,
+            "color": ""
+        }
+    ]
+}
 ```
 
-3. Lint code:
-```bash
-npm run lint
+#### Get Transactions
+- **GET** `/api/transactions?user_name=username&session_id=session_token`
+- Response:
+```json
+{
+    "status": "success",
+    "data": [
+        {
+            "payment_id": "uuid",
+            "user_name": "username",
+            "category": "category_name",
+            "amount": 100.00,
+            "color": "",
+            "description": "transaction description",
+            "date": "YYYY-MM-DD"
+        }
+    ]
+}
 ```
 
-## Production
-
-To run in production mode:
-```bash
-npm start
+#### Create Transaction
+- **POST** `/api/create-transaction`
+- Request body:
+```json
+{
+    "session_id": "session_token",
+    "user_name": "username",
+    "payment_id": "uuid",
+    "category": "category_name",
+    "amount": 100.00,
+    "create_date": "YYYY-MM-DD",
+    "transaction_desc": "transaction description"
+}
 ```
-
-## Environment Variables
-
-| Variable | Description | Default |
-|----------|-------------|---------|
-| PORT | Server port | 4000 |
-| NODE_ENV | Environment (development/production) | development |
-| DB_HOST | Database host | localhost |
-| DB_PORT | Database port | 5432 |
-| DB_USER | Database user | - |
-| DB_PASSWORD | Database password | - |
-| DB_NAME | Database name | - |
-| CORS_ORIGIN | Allowed CORS origin | * |
-| LOG_LEVEL | Logging level | info |
+- Response:
+```json
+{
+    "status": "success",
+    "data": {
+        "payment_id": "uuid",
+        "user": "username",
+        "category": "category_name",
+        "amount": 100.00,
+        "date": "YYYY-MM-DD",
+        "description": "transaction description"
+    }
+}
+```
 
 ## Error Handling
 
-The API includes centralized error handling with appropriate HTTP status codes and error messages.
+The API uses a centralized error handling middleware that returns errors in the following format:
+
+```json
+{
+    "status": "error",
+    "message": "Error message",
+    "code": "error_code"
+}
+```
 
 ## Security
 
-- Environment variables for sensitive data
-- CORS configuration
-- Input validation
-- Secure database connections
+- All endpoints (except login) require a valid session token
+- Session tokens are validated on each request
+- Passwords are stored securely in the database
+- CORS is configured for security
 
 ## Contributing
 

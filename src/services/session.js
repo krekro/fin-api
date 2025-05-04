@@ -8,7 +8,7 @@ async function validateSession(session_id, user_name){
         return true;
     }
     else{
-        console.log(`session error: submitted ID=${session_id}, DB ID=${data.session_id}`)
+        console.log(`session error: submitted ID=${session_id}`)
         return false;
     }
 }
