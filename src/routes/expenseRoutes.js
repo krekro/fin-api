@@ -14,10 +14,10 @@ router.get('/expenses', async (req, res, next) => {
             `SELECT category, SUM(amount), user_name FROM expense_data WHERE EXTRACT(MONTH from create_date)=EXTRACT(MONTH from CURRENT_DATE) AND user_name='${user_name}' GROUP BY category, user_name`
         );
             const expenses = result.rows.map(row => ({
-                user: row.user_name,
-                category: row.category,
-                amount: row.sum,
-                color: "" // Default color
+                User: row.user_name,
+                Category: row.category,
+                Amount: row.sum,
+                Color: "" // Default color
             }));
 
             res.json({
@@ -45,13 +45,13 @@ router.get('/transactions', async (req, res, next) => {
             );
 
             const transactions = result.rows.map(row => ({
-                payment_id: row.payment_id,
-                user_name: row.user_name,
-                category: row.category,
-                amount: row.amount,
-                color: "",
-                description: row.transaction_desc || "No description provided",
-                date: row.create_date.toISOString().split('T')[0] // Format date to YYYY-MM-DD
+                Payment_id: row.payment_id,
+                User_name: row.user_name,
+                Category: row.category,
+                Amount: row.amount,
+                Color: "",
+                Description: row.transaction_desc || "No description provided",
+                Date: row.create_date.toISOString().split('T')[0] // Format date to YYYY-MM-DD
             }));
 
             res.json({
@@ -80,12 +80,12 @@ router.post('/create-transaction', async (req, res, next) => {
             res.json({
                 status: 'success',
                 data: {
-                    payment_id: transaction.payment_id,
-                    user: transaction.user_name,
-                    category: transaction.category,
-                    amount: transaction.amount,
-                    date: transaction.create_date,
-                    description: transaction.transaction_desc || "No description provided"
+                    Payment_id: transaction.payment_id,
+                    User: transaction.user_name,
+                    Category: transaction.category,
+                    Amount: transaction.amount,
+                    Date: transaction.create_date,
+                    Description: transaction.transaction_desc || "No description provided"
 
                 }
             });
