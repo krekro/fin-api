@@ -19,7 +19,7 @@ const config = {
         sslmode: process.env.SUPA_SSLMODE
     },
     cors: {
-        origin: process.env.CORS_ORIGIN || '*',
+        origin: '*',
         methods: ['GET', 'POST', 'PUT', 'DELETE'],
         allowedHeaders: ['Content-Type', 'Authorization'],
     },
